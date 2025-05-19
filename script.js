@@ -9,8 +9,20 @@ document.getElementById("studentForm").addEventListener("submit", function (e) {
     const lastName = document.getElementById("lastName").value.trim();
     const grade = parseFloat(document.getElementById("grade").value);
 
+    const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+
     if (!name || !lastName || isNaN(grade) || grade < 1 || grade > 7) {
         alert("Por favor complete todos los campos correctamente.");
+        return;
+    }
+
+    if (!nameRegex.test(name)) {
+        alert("El campo 'Nombre' no puede contener números ni símbolos.");
+        return;
+    }
+
+    if (!nameRegex.test(lastName)) {
+        alert("El campo 'Apellido' no puede contener números ni símbolos.");
         return;
     }
 
@@ -43,3 +55,4 @@ function calcularPromedio() {
     const promedio = total / students.length;
     averageDiv.textContent = `Promedio General del Curso : ${promedio.toFixed(2)}`;
 }
+
