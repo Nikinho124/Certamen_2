@@ -35,19 +35,29 @@ document.getElementById("studentForm").addEventListener("submit", function (e) {
     this.reset();
 });
 
+
+
+
 function addStudentToTable(student) {
     const row = document.createElement("tr");
     row.innerHTML = `
         <td>${student.name}</td>
         <td>${student.lastName}</td>
         <td>${student.grade}</td>
-        <td> <button class="delete-btn">Eliminar</button> </td>
+        <td>
+            <button class="edit-btn">Editar</button>
+            <button class="delete-btn">Eliminar</button>
+        </td>
     `;
-    row.querySelector(".delete-btn").addEventListener("click",function(){
-        deleteEstudiante(student,row);
+    row.querySelector(".delete-btn").addEventListener("click", function () {
+        deleteEstudiante(student, row);
+    });
+    row.querySelector(".edit-btn").addEventListener("click", function () {
+        editEstudiante(student, row);
     });
     tableBody.appendChild(row);
 }
+
 
 function calcularPromedio() {
     if (students.length === 0) {
@@ -67,5 +77,18 @@ function deleteEstudiante(student,row){
         students.splice(index,1);
         calcularPromedio();
         row.remove();
+    }
+}
+
+function editEstudiante(student, row) {
+    document.getElementById("name").value = student.name;
+    document.getElementById("lastName").value = student.lastName;
+    document.getElementById("grade").value = student.grade;
+    
+    const index = students.indexOf(student);
+    if (index > -1) {
+        students.splice(index, 1); 
+        row.remove(); 
+        calcularPromedio();
     }
 }
