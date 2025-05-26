@@ -8,30 +8,23 @@ document.getElementById("studentForm").addEventListener("submit", function (e) {
     const name = document.getElementById("name").value.trim();
     const lastName = document.getElementById("lastName").value.trim();
     const grade = parseFloat(document.getElementById("grade").value);
-
     const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
-
     if (!name || !lastName || isNaN(grade) || grade < 1 || grade > 7) {
         alert("Por favor complete todos los campos correctamente.");
         return;
     }
-
     if (!nameRegex.test(name)) {
         alert("El campo 'Nombre' no puede contener números ni símbolos.");
         return;
     }
-
     if (!nameRegex.test(lastName)) {
         alert("El campo 'Apellido' no puede contener números ni símbolos.");
         return;
     }
-
     const student = { name, lastName, grade };
     students.push(student);
-
     addStudentToTable(student);
     calcularPromedio();
-
     this.reset();
 });
 
@@ -56,6 +49,14 @@ function addStudentToTable(student) {
         editEstudiante(student, row);
     });
     tableBody.appendChild(row);
+
+  if (student.grade >= 4.0) {
+    tableBody.prepend(row); 
+  } else {
+    tableBody.appendChild(row); 
+  }
+  calcularPromedio();
+  actualizarResumen();
 }
 
 
@@ -78,6 +79,8 @@ function deleteEstudiante(student,row){
         calcularPromedio();
         row.remove();
     }
+    calcularPromedio();
+    actualizarResumen();
 }
 
 function editEstudiante(student, row) {
@@ -92,3 +95,13 @@ function editEstudiante(student, row) {
         calcularPromedio();
     }
 }
+function actualizarResumen() {
+    const total = students.length;
+    const aprobados = students.filter(s => s.grade >= 4).length;
+    const reprobados = total - aprobados;
+  
+    document.getElementById("totalEstudiantes").textContent = total;
+    document.getElementById("aprobados").textContent = aprobados;
+    document.getElementById("reprobados").textContent = reprobados;
+  }
+
